@@ -9,10 +9,9 @@
 #include<string>
 
 //********** マクロ定義・画像のファイルパスと名前 **********
-#define MY_IMG_DIR_JIKI		R"(.\MY_IMG\JIKI\)"		//自機の画像ファイルの場所
+#define MY_IMG_DIR_BACK_1	R"(.\MY_IMG\BACKIMAGE\)"		//自機の画像ファイルの場所
 
-#define MY_IMG_NAME_JIKI_1	R"(jiki_1_mini.png)"	//自機1の名前
-#define MY_IMG_NAME_JIKI_2	R"(jiki_2_mini.png)"	//自機2の名前
+#define MY_IMG_NAME_BACK_1	R"(back5.jpg)"	//背景画像の名前
 
 //********* マクロ定義・エラーメッセージ ***********
 #define IMAGE_ERROR_TITLE	"IMAGE_ERROR"					//エラータイトル
