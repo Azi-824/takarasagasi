@@ -24,6 +24,7 @@
 
 #define TITLE_BACKIMAGE	"MY_IMG\\BACKIMAGE\\back5.jpg"		//背景画像のパス
 #define CHARA_IMAGE		"MY_IMG\\CHARA\\boal.png"			//プレイヤー画像のパス
+#define ITEM_IMAGE		"MY_IMG\\ITEM\\box.png"				//宝箱の画像のパス
 
 #define SCENE_KIND	3				//シーンの種類
 
@@ -74,6 +75,7 @@ int MoveSpead = 5;	//移動速度
 
 GAZOU Back[SCENE_KIND];	//背景画像
 GAZOU Chara;			//プレイヤー画像
+GAZOU Item;				//宝箱の画像
 
 //*********** プロトタイプ宣言 ***************
 int SceneTitle();	//タイトル画面の処理
@@ -84,6 +86,7 @@ BOOL MY_GAZOU_LOAD(GAZOU *, int, int, const char *);				//画像を読み込む関数
 
 VOID DRAW_BACKIMAGE(GAZOU *);		//指定した背景画像を描画する関数
 VOID DrawChara();					//プレイヤーを描画する関数
+VOID DrawItem(GAZOU, int);			//アイテムを描画する関数
 
 VOID MoveChara();				//プレイヤーを移動させる関数
 

@@ -30,6 +30,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//プレイヤー画像の読み込み
 	if (MY_GAZOU_LOAD(&Chara, 0, 0, CHARA_IMAGE) == FALSE) { MessageBox(NULL, CHARA_IMAGE, "NotFound", MB_OK); return -1; }		//プレイヤー画像を読み込む
 
+	//アイテム画像の読み込み
+	if (MY_GAZOU_LOAD(&Item, 0, 0, ITEM_IMAGE) == FALSE) { MessageBox(NULL, ITEM_IMAGE, "NotFound", MB_OK); return -1; }		//アイテム画像を読み込む
 
 	while (TRUE)		//無限ループ
 	{
@@ -83,6 +85,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	delete fps;				//fpsを破棄
 	delete keydown;			//keydownを破棄
 
+	for (int i = 0; i < SCENE_KIND; i++)
+	{
+		DeleteGraph(Back[i].Handle);	//背景画像のハンドルの削除
+	}
+	
+	DeleteGraph(Chara.Handle);			//プレイヤー画像のハンドルの削除
+	DeleteGraph(Item.Handle);			//アイテム画像のハンドルの削除
+
 	DxLib_End();			//DXライブラリ使用の終了処理
 
 	return 0;
@@ -115,8 +125,11 @@ int SceneTitle()
 //************* プレイ画面の処理 ****************
 int ScenePlay()
 {
+	DrawString(0, 20, "プレイ画面", GetColor(255, 255, 255));
 
 	DrawChara();	//プレイヤーの描画処理
+
+	DrawItem(Item, 1);	//宝箱の描画処理
 
 	return 0;
 }
@@ -212,7 +225,7 @@ VOID DRAW_BACKIMAGE(GAZOU *back)
 VOID DrawChara()
 {
 	MoveChara();	//プレイヤーを移動させる関数
-	DrawGraph(Chara.X, Chara.Y, Chara.Handle, FALSE);	//プレイヤーの描画
+	DrawGraph(Chara.X, Chara.Y, Chara.Handle, TRUE);	//プレイヤーの描画
 }
 
 //************ プレイヤーの位置を動かす関数 *************
@@ -255,6 +268,18 @@ VOID MoveChara()
 			Chara.rect.right += MoveSpead;	//領域を右へ移動
 		}
 	}
+	return;
+}
+
+//************ アイテムを描画する関数 *************
+VOID DrawItem(GAZOU item, int num)
+{
+	for (int cnt = 0; cnt < num; cnt++)
+	{
+		DrawGraph(item.X, item.Y, item.Handle, TRUE);	//アイテムの描画
+	}
+	
+
 	return;
 }
 
