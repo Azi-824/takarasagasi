@@ -27,6 +27,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//背景画像の読み込み
 	if (MY_GAZOU_LOAD(&Back[BACKIMAGE_TITLE], 0, 0, TITLE_BACKIMAGE) == FALSE) { MessageBox(NULL, TITLE_BACKIMAGE, "NotFound", MB_OK); return -1; }		//タイトル画面の背景画像を読み込む
 
+	//プレイヤー画像の読み込み
+	if (MY_GAZOU_LOAD(&Chara, 0, 0, CHARA_IMAGE) == FALSE) { MessageBox(NULL, CHARA_IMAGE, "NotFound", MB_OK); return -1; }		//プレイヤー画像を読み込む
+
 
 	while (TRUE)		//無限ループ
 	{
@@ -113,7 +116,7 @@ int SceneTitle()
 int ScenePlay()
 {
 
-	DrawString(300, 100, "Hello", GetColor(255, 255, 255));
+	DrawChara();	//プレイヤーの描画処理
 
 	return 0;
 }
@@ -189,6 +192,12 @@ BOOL MY_GAZOU_LOAD(GAZOU *g, int x, int y, const char *path)
 	g->C_Width = g->Width / 2;						//画像の横サイズの中心を取得
 	g->C_Height = g->Height / 2;					//画像の縦サイズの中心を取得
 
+	//領域の設定
+	g->rect.left = x;				//左上
+	g->rect.top = y;				//左上
+	g->rect.right = x + g->Width;	//右下
+	g->rect.bottom = y + g->Height;	//右下
+
 	return TRUE;
 
 }
@@ -197,5 +206,55 @@ BOOL MY_GAZOU_LOAD(GAZOU *g, int x, int y, const char *path)
 VOID DRAW_BACKIMAGE(GAZOU *back)
 {
 	DrawGraph(back->X, back->Y, back->Handle, FALSE);	//背景の描画
+}
+
+//************ プレイヤーを描画する関数 *************
+VOID DrawChara()
+{
+	MoveChara();	//プレイヤーを移動させる関数
+	DrawGraph(Chara.X, Chara.Y, Chara.Handle, FALSE);	//プレイヤーの描画
+}
+
+//************ プレイヤーの位置を動かす関数 *************
+VOID MoveChara()
+{
+
+	if (keydown->IsKeyDown(KEY_INPUT_UP) == TRUE)			//上矢印キーが押されていたら
+	{
+		if (Chara.rect.top > 0)	//画面内なら
+		{
+			Chara.Y -= MoveSpead;	//上へ移動
+			Chara.rect.top -= MoveSpead;	//領域を上へ移動
+			Chara.rect.bottom -= MoveSpead;	//領域を上へ移動
+		}
+	}	
+	else if (keydown->IsKeyDown(KEY_INPUT_DOWN) == TRUE)	//下矢印キーが押されていたら
+	{
+		if (Chara.rect.bottom < GAME_HEIGHT)	//画面無いなら
+		{
+			Chara.Y += MoveSpead;	//下へ移動
+			Chara.rect.top += MoveSpead;	//領域を下へ移動
+			Chara.rect.bottom += MoveSpead;	//領域を下へ移動
+		}
+	}	
+	else if (keydown->IsKeyDown(KEY_INPUT_LEFT) == TRUE)	//左矢印キーが押されていたら
+	{
+		if (Chara.rect.left > 0)	//画面無いなら
+		{
+			Chara.X -= MoveSpead;	//左へ移動
+			Chara.rect.left -= MoveSpead;	//領域を左へ移動
+			Chara.rect.right -= MoveSpead;	//領域を左へ移動
+		}
+	}
+	else if (keydown->IsKeyDown(KEY_INPUT_RIGHT) == TRUE)	//右矢印キーが押されていたら
+	{
+		if (Chara.rect.right < GAME_WIDTH)	//画面無いなら
+		{
+			Chara.X += MoveSpead;	//右へ移動
+			Chara.rect.left += MoveSpead;	//領域を右へ移動
+			Chara.rect.right += MoveSpead;	//領域を右へ移動
+		}
+	}
+	return;
 }
 
