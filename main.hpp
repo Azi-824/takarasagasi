@@ -22,6 +22,10 @@
 
 #define GAME_FPS_SPEED							60
 
+#define TITLE_BACKIMAGE	"MY_IMG\\BACKIMAGE\\back5.jpg"
+
+#define SCENE_KIND	3				//シーンの種類
+
 //########## 列挙型 ##########
 enum GAME_SCENE {
 	GAME_SCENE_TITLE,	//タイトル画面
@@ -29,13 +33,45 @@ enum GAME_SCENE {
 	GAME_SCENE_END		//エンド画面
 };
 
+enum BACKIMAGE_SCENE {
+	BACKIMAGE_TITLE,	//タイトル画面の背景
+	BACKIMAGE_PLAY,		//プレイ画面の背景
+	BACKIMAGE_END		//エンド画面の背景
+};
+
+//########## 構造体 ##########
+struct STRUCT_GAZOU {
+	int Handle;				//画像のハンドル
+	char FilePath[128];		//ファイルのパス
+	int X;					//横の位置
+	int Y;					//縦の位置
+	int Width;				//横のサイズ	
+	int Height;				//縦のサイズ
+	int C_Width;			//横の中心位置
+	int C_Height;			//縦の中心位置
+	int Direction;			//画像の移動向き
+	BOOL Num_flg;			//数字用フラグ
+	BOOL Positon_flg;		//座標設定完了用フラグ
+};
+
+//****************名前の再定義********************
+typedef STRUCT_GAZOU GAZOU;
+
 //*********** グローバル変数 *************
 int GameSceneNow;	//現在のゲームシーン
+int BackImageNow = (int)BACKIMAGE_TITLE;	//現在の背景画像
+
+GAZOU Back[SCENE_KIND];	//背景画像
 
 //*********** プロトタイプ宣言 ***************
 int SceneTitle();	//タイトル画面の処理
 int ScenePlay();	//プレイ画面の処理
 int SceneEnd();	//エンド画面の処理
+
+BOOL MY_GAZOU_LOAD(GAZOU *, int, int, const char *);				//画像を読み込む関数
+
+VOID DRAW_BACKIMAGE(GAZOU *);		//指定した背景画像を描画する関数
+
 
 VOID DrawCenter(char str[][128], int row, char *fontname, int size);	//中央に文字を描画する関数
 VOID SetDefaultFont(BOOL anti);			//デフォルトフォントに設定する関数

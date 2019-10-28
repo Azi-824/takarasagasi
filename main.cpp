@@ -3,7 +3,6 @@
 #include "main.hpp"
 #include "FPS.hpp"
 #include "KEYDOWN.hpp"
-#include "IMAGE.hpp"
 
 
 //*********** グローバルオブジェクト ***********
@@ -25,7 +24,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	
+	//背景画像の読み込み
+	if (MY_GAZOU_LOAD(&Back[BACKIMAGE_TITLE], 0, 0, TITLE_BACKIMAGE) == FALSE) { MessageBox(NULL, TITLE_BACKIMAGE, "NotFound", MB_OK); return -1; }		//タイトル画面の背景画像を読み込む
 
 
 	while (TRUE)		//無限ループ
@@ -88,9 +88,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 //************** タイトル画面の処理 ***************
 int SceneTitle()
 {
-	IMAGE *back = new IMAGE(MY_IMG_DIR_BACK_1, MY_IMG_NAME_BACK_1);
-	if (back->GetIsLoad() == FALSE) { return -1; };	//画像読み込みチェック
-	back->Draw();
+	DRAW_BACKIMAGE(&Back[BackImageNow]);	//背景の描画
 
 	DrawString(0, 20, "タイトル画面", GetColor(255, 255, 255));
 
@@ -104,6 +102,7 @@ int SceneTitle()
 
 	if (keydown->IsKeyDown(KEY_INPUT_RETURN) == TRUE)	//エンターキーが押されていたら
 	{
+		BackImageNow = (int)BACKIMAGE_PLAY;		//背景画像をプレイ画面に変える
 		GameSceneNow = (int)GAME_SCENE_PLAY;	//シーンをプレイ画面に変える
 	}
 
@@ -113,6 +112,7 @@ int SceneTitle()
 //************* プレイ画面の処理 ****************
 int ScenePlay()
 {
+
 	DrawString(300, 100, "Hello", GetColor(255, 255, 255));
 
 	return 0;
@@ -168,3 +168,34 @@ VOID SetDefaultFont(BOOL anti)
 	return;
 
 }
+
+//########## 画像を読み込む設定をする関数 ##########
+
+//引　数：画像構造体　：設定する画像構造体の変数
+//引　数：int　：画像の横の位置
+//引　数：int　：画像の縦の位置
+//引　数：const char *：読み込む画像のファイルパス
+//戻り値：BOOL：エラー時：FALSE
+BOOL MY_GAZOU_LOAD(GAZOU *g, int x, int y, const char *path)
+{
+	wsprintf(g->FilePath, path);					//ファイルパスをコピー
+	g->Handle = LoadGraph(g->FilePath);				//画像をメモリに読み込み、ハンドルを取得
+
+	if (g->Handle == -1) { return FALSE; }			//画像読み込みエラー
+
+	GetGraphSize(g->Handle, &g->Width, &g->Height);	//画像サイズを取得
+	g->X = x;
+	g->Y = y;
+	g->C_Width = g->Width / 2;						//画像の横サイズの中心を取得
+	g->C_Height = g->Height / 2;					//画像の縦サイズの中心を取得
+
+	return TRUE;
+
+}
+
+//########### 指定した背景画像を描画する関数 ###########
+VOID DRAW_BACKIMAGE(GAZOU *back)
+{
+	DrawGraph(back->X, back->Y, back->Handle, FALSE);	//背景の描画
+}
+
