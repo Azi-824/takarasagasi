@@ -118,6 +118,8 @@ int SceneTitle()
 	DRAW_BACKIMAGE(&Back[BackImageNow]);	//背景の描画
 
 	DrawString(0, 20, "タイトル画面", GetColor(255, 255, 255));
+	DrawString(0, 40, "スペースキーを押してください", GetColor(255, 255, 255));
+
 
 	//▼▼▼▼▼▼▼▼▼▼ タイトルの描画 ▼▼▼▼▼▼▼▼▼▼
 	char StrGameTitle[1][128] = { "宝探し" };
@@ -165,6 +167,16 @@ int SceneEnd()
 	DRAW_BACKIMAGE(&Back[BackImageNow]);	//背景の描画
 
 	DrawString(0, 20, "エンド画面", GetColor(255, 255, 255));
+	DrawString(0, 40, "エンターキー:もう一回", GetColor(255, 255, 255));
+	DrawString(0, 60, "バックスペースキー:ゲーム終了", GetColor(255, 255, 255));
+
+	//▼▼▼▼▼▼▼▼▼▼ エンド描画 ▼▼▼▼▼▼▼▼▼▼
+	char StrGameTitle[1][128] = { "GAME CLEAR!" };
+	char StrFontTitle[128] = { "MS ゴシック" };	//大文字半角「MS」、半角「空白」、全角「ゴシック」
+
+	DrawCenter(&StrGameTitle[0], 1, StrFontTitle, 64);		//画面中央に描画
+	//▲▲▲▲▲▲▲▲▲▲ エンド描画 ▲▲▲▲▲▲▲▲▲▲
+
 
 	if (keydown->IsKeyDown(KEY_INPUT_RETURN) == TRUE)	//エンターキーが押されていたら
 	{
