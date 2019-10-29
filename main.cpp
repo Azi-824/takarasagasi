@@ -112,6 +112,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 //************** タイトル画面の処理 ***************
 int SceneTitle()
 {
+
+	Init();		//初期化関数
+
 	DRAW_BACKIMAGE(&Back[BackImageNow]);	//背景の描画
 
 	DrawString(0, 20, "タイトル画面", GetColor(255, 255, 255));
@@ -433,5 +436,34 @@ VOID CheckTakara()
 		}
 	}
 	return;
+}
+
+//******** 初期化関数 ************
+VOID Init()
+{
+
+	SetPlayer();		//プレイヤーの設定
+
+	BackImageNow = (int)BACKIMAGE_TITLE;		//背景画像をタイトル画面に変える
+	GameSceneNow = (int)GAME_SCENE_TITLE;		//シーンをタイトル画面に変える
+
+	GetNum = 0;	//発見数初期化
+
+	for (int i = 0; i < ITEM_KAZU; i++)
+	{
+		Item[i].Positon_flg = false;	//座標設定初期化
+	}
+
+}
+
+//********* プレイヤーの設定をする関数 ***********
+VOID SetPlayer()
+{
+	//位置を真ん中に設定
+	Chara.X = (GAME_WIDTH / 2) - (Chara.Width / 2);		//X座標設定
+	Chara.Y = (GAME_HEIGHT / 2) - (Chara.Height / 2);	//Y座標設定
+
+	RectSet(&Chara);	//領域設定
+
 }
 

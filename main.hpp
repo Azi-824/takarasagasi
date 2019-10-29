@@ -104,6 +104,9 @@ VOID RectSet(GAZOU *);				//領域の設定をする関数
 BOOL MY_CHECK_RECT_ATARI(RECT, RECT);	//領域の当たり判定をする関数
 VOID CheckTakara();						//宝箱と当たったか確認する関数
 
+VOID Init();							//初期化関数
+VOID SetPlayer();						//プレイヤーの設定をする関数
+
 
 
 
