@@ -27,6 +27,9 @@
 #define CHARA_IMAGE			"MY_IMG\\CHARA\\boal.png"			//プレイヤー画像のパス
 #define ITEM_IMAGE			"MY_IMG\\ITEM\\box.png"				//宝箱の画像のパス
 
+#define BGM_PATH			"MY_MUSIC\\BGM\\cyber42.mp3"		//BGMのパス
+#define SE_PATH				"MY_MUSIC\\SE\\hakken.mp3"			//SEのパス
+
 #define SCENE_KIND	3				//シーンの種類
 #define ITEM_KAZU	3				//宝箱の数
 
@@ -67,21 +70,36 @@ struct STRUCT_GAZOU {
 	RECT rect;				//領域管理用
 };
 
+struct STRUCT_MUSIC
+{
+	int Handle;			//音のハンドル
+	char FilePath[128];	//ファイルのパス
+	int Playtype;		//音の再生方法
+};	//音構造体
+
+
 //****************名前の再定義********************
 typedef STRUCT_GAZOU GAZOU;
+typedef STRUCT_MUSIC MUSIC;
+
 
 //*********** グローバル変数 *************
 int GameSceneNow;	//現在のゲームシーン
 int BackImageNow = (int)BACKIMAGE_TITLE;	//現在の背景画像
 
-int MoveSpead = 5;		//移動速度
-int GetNum = 0;			//見つけた宝箱の数
+int MoveSpead;		//移動速度
+int GetNum;			//見つけた宝箱の数
 
-bool GameEndflg = false;	//ゲーム終了フラグ
+bool GameEndflg;	//ゲーム終了フラグ
 
+//画像関係
 GAZOU Back[SCENE_KIND];	//背景画像
 GAZOU Chara;			//プレイヤー画像
 GAZOU Item[ITEM_KAZU];	//宝箱の画像
+
+//音関係
+MUSIC Bgm;	//BGM
+MUSIC Se;	//SE
 
 //*********** プロトタイプ宣言 ***************
 int SceneTitle();	//タイトル画面の処理
@@ -89,6 +107,7 @@ int ScenePlay();	//プレイ画面の処理
 int SceneEnd();		//エンド画面の処理
 
 BOOL MY_GAZOU_LOAD(GAZOU *, int, int, const char *);				//画像を読み込む関数
+BOOL MY_MUSIC_LOAD(MUSIC *, const char *);							//音を読み込む関数
 
 VOID DRAW_BACKIMAGE(GAZOU *);		//指定した背景画像を描画する関数
 VOID DrawChara();					//プレイヤーを描画する関数

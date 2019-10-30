@@ -28,7 +28,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	if (MY_GAZOU_LOAD(&Back[BACKIMAGE_TITLE], 0, 0, TITLE_BACKIMAGE) == FALSE) { MessageBox(NULL, TITLE_BACKIMAGE, "NotFound", MB_OK); return -1; }		//タイトル画面の背景画像を読み込む
 	if (MY_GAZOU_LOAD(&Back[BACKIMAGE_END], 0, 0, END_BACKIMAGE) == FALSE) { MessageBox(NULL, END_BACKIMAGE, "NotFound", MB_OK); return -1; }		//タイトル画面の背景画像を読み込む
 
-
 	//プレイヤー画像の読み込み
 	if (MY_GAZOU_LOAD(&Chara, 0, 0, CHARA_IMAGE) == FALSE) { MessageBox(NULL, CHARA_IMAGE, "NotFound", MB_OK); return -1; }		//プレイヤー画像を読み込む
 
@@ -37,6 +36,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	{
 		if (MY_GAZOU_LOAD(&Item[i], 0, 0, ITEM_IMAGE) == FALSE) { MessageBox(NULL, ITEM_IMAGE, "NotFound", MB_OK); return -1; }		//アイテム画像を読み込む
 	}
+
+	//音関係読み込み
+	MY_MUSIC_LOAD(&Bgm, BGM_PATH);		//BGM読み込み
+	MY_MUSIC_LOAD(&Se, SE_PATH);		//SE読み込み
 
 	while (TRUE)		//無限ループ
 	{
@@ -99,6 +102,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 	
 	DeleteGraph(Chara.Handle);					//プレイヤー画像のハンドルの削除
+
 	for (int i = 0; i < ITEM_KAZU; i++)
 	{
 		DeleteGraph(Item[i].Handle);			//アイテム画像のハンドルの削除
@@ -114,6 +118,14 @@ int SceneTitle()
 {
 
 	Init();		//初期化関数
+
+		//BGMが流れていないとき
+	if (CheckSoundMem(Bgm.Handle) == 0)
+	{
+		ChangeVolumeSoundMem(255 * 30 / 100, Bgm.Handle);	//BGMの音量を50％にする
+		PlaySoundMem(Bgm.Handle, DX_PLAYTYPE_LOOP);			//BGMを流す
+	}
+
 
 	DRAW_BACKIMAGE(&Back[BackImageNow]);	//背景の描画
 
@@ -433,7 +445,7 @@ VOID RectSet(GAZOU *item)
 
 }
 
-//********* 宝箱と当たったか確認する関数 **********:
+//********* 宝箱と当たったか確認する関数 **********
 VOID CheckTakara()
 {
 	for (int i = 0; i < ITEM_KAZU; i++)
@@ -444,6 +456,9 @@ VOID CheckTakara()
 			{
 				Item[i].IsDraw = TRUE;	//宝箱を描画する
 				GetNum++;	//見つけた宝箱の数を加算する
+				//音を鳴らす処理
+				ChangeVolumeSoundMem(255 * 80 / 100, Se.Handle);	//SEの音量を50％にする
+				PlaySoundMem(Se.Handle, DX_PLAYTYPE_BACK);			//発見の効果音を鳴らす
 			}
 		}
 	}
@@ -455,6 +470,10 @@ VOID Init()
 {
 
 	SetPlayer();		//プレイヤーの設定
+
+	MoveSpead = 5;		//移動速度設定
+
+	GameEndflg = false;	//ゲーム終了フラグ
 
 	BackImageNow = (int)BACKIMAGE_TITLE;		//背景画像をタイトル画面に変える
 	GameSceneNow = (int)GAME_SCENE_TITLE;		//シーンをタイトル画面に変える
@@ -478,4 +497,19 @@ VOID SetPlayer()
 	RectSet(&Chara);	//領域設定
 
 }
+
+//########## 音を読み込む設定をする関数 ##########
+//引　数：音構造体　	:設定する音構造体の変数
+//引　数：const char *	:読み込む画像のファイルパス
+//戻り値：BOOL			:TRUE:正常 / FALSE:異常
+BOOL MY_MUSIC_LOAD(MUSIC *m, const char *path)
+{
+	//音を読み込む
+	m->Handle = LoadSoundMem(path);
+
+	if (m->Handle == -1) { return FALSE; }
+
+	return TRUE;
+}
+
 
