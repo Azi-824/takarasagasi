@@ -153,14 +153,15 @@ int SceneTitle()
 //************* プレイ画面の処理 ****************
 int ScenePlay()
 {
+	//情報の描画
 	DrawString(0, 20, "プレイ画面", GetColor(255, 255, 255));
 	DrawFormatString(0, 40, GetColor(255, 255, 255), "発見数:%d/%d", GetNum, ITEM_KAZU);	//現在の発見数を描画
 
 	DrawChara();	//プレイヤーの描画処理
 
-	DrawItem(ITEM_KAZU);	//宝箱の描画処理
-
 	CheckTakara();			//宝箱と当たったか確認
+
+	DrawItem(ITEM_KAZU);	//宝箱の描画処理
 
 	if (GetNum == ITEM_KAZU)	//全ての宝箱を発見したら
 	{
@@ -353,11 +354,11 @@ VOID DrawItem(int num)
 			DrawGraph(Item[cnt].X, Item[cnt].Y, Item[cnt].Handle, TRUE);	//アイテムの描画
 		}
 
-		DrawBox(Item[cnt].rect.left,
-			Item[cnt].rect.top,
-			Item[cnt].rect.right,
-			Item[cnt].rect.bottom,
-			GetColor(255, 255, 255), FALSE);//宝箱の領域を描画
+		//DrawBox(Item[cnt].rect.left,
+		//	Item[cnt].rect.top,
+		//	Item[cnt].rect.right,
+		//	Item[cnt].rect.bottom,
+		//	GetColor(255, 255, 255), FALSE);//宝箱の領域を描画
 	}
 	//▲▲▲▲▲▲▲▲▲▲▲▲▲ 描画処理 ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
