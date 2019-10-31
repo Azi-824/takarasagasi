@@ -84,7 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		//▲▲▲▲▲▲▲　ゲームのシーンここまで ▲▲▲▲▲▲▲▲
 
-		fps->Draw(0, 0);				//FPSの処理(描画)
+		//fps->Draw(0, 0);				//FPSの処理(描画)
 
 		ScreenFlip();					//モニタのリフレッシュレートの速さで裏画面を再描画
 
@@ -129,8 +129,8 @@ int SceneTitle()
 
 	DRAW_BACKIMAGE(&Back[BackImageNow]);	//背景の描画
 
-	DrawString(0, 20, "タイトル画面", GetColor(255, 255, 255));
-	DrawString(0, 40, "スペースキーを押してください", GetColor(255, 255, 255));
+	DrawString(0, 0, "タイトル画面", GetColor(255, 255, 255));
+	DrawString(0, 20, "スペースキーを押してください", GetColor(255, 255, 255));
 
 
 	//▼▼▼▼▼▼▼▼▼▼ タイトルの描画 ▼▼▼▼▼▼▼▼▼▼
@@ -154,8 +154,8 @@ int SceneTitle()
 int ScenePlay()
 {
 	//情報の描画
-	DrawString(0, 20, "プレイ画面", GetColor(255, 255, 255));
-	DrawFormatString(0, 40, GetColor(255, 255, 255), "発見数:%d/%d", GetNum, ITEM_KAZU);	//現在の発見数を描画
+	//DrawString(0, 20, "プレイ画面", GetColor(255, 255, 255));
+	DrawFormatString(0, 0, GetColor(255, 255, 255), "発見数:%d/%d", GetNum, ITEM_KAZU);	//現在の発見数を描画
 
 	DrawChara();	//プレイヤーの描画処理
 
@@ -179,9 +179,9 @@ int SceneEnd()
 
 	DRAW_BACKIMAGE(&Back[BackImageNow]);	//背景の描画
 
-	DrawString(0, 20, "エンド画面", GetColor(255, 255, 255));
-	DrawString(0, 40, "エンターキー:もう一回", GetColor(255, 255, 255));
-	DrawString(0, 60, "バックスペースキー:ゲーム終了", GetColor(255, 255, 255));
+	DrawString(0, 0, "エンド画面", GetColor(255, 255, 255));
+	DrawString(0, 20, "エンターキー:もう一回", GetColor(255, 255, 255));
+	DrawString(0, 40, "バックスペースキー:ゲーム終了", GetColor(255, 255, 255));
 
 	//▼▼▼▼▼▼▼▼▼▼ エンド描画 ▼▼▼▼▼▼▼▼▼▼
 	char StrGameTitle[1][128] = { "GAME CLEAR!" };
